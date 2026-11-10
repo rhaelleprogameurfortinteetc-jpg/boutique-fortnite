@@ -89,6 +89,40 @@
     }
 
     loadShop();
-  </script>
+  </script>async function loadShop() {
+  try {
+    const response = await fetch('https://fortnite-api.com/v2/shop/br', {
+      headers: {
+        'Authorization': '4e63b859-865a-4fb8-bec9-90f2504dce4c'
+      }
+    });
+    const json = await response.json();
+    const entries = json.data.entries;
+    
+    const grid = document.getElementById('shop-grid');
+    grid.innerHTML = '';
+
+    entries.forEach(entry => {
+      if (entry.items && entry.items.length > 0) {
+        const item = entry.items[0];
+        const name = item.name;
+        const icon = item.images.icon || item.images.featured || '';
+        const price = entry.finalPrice;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${icon}" alt="${name}">
+          <div class="name">${name}</div>
+          <div class="price">🪙 ${price} V-Bucks</div>
+        `;
+        grid.appendChild(card);
+      }
+    });
+  } catch (err) {
+    document.getElementById('shop-grid').innerText = "Impossible de charger la boutique.";
+  }
+}
+
 </body>
 </html>
