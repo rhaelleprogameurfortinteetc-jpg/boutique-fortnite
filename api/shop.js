@@ -5,29 +5,46 @@ module.exports = async function handler(req, res) {
   }
 
   const headers = { Accept: 'application/json' };
-  // La boutique est publique, mais si une clé est configurée dans Vercel,
-  // Fortnite-API attend le nom d'en-tête x-api-key.
-  if (process.env.FORTNITE_API_KEY) {
-    headers['x-api-key'] = process.env.FORTNITE_API_KEY;
+  const key = process.env.FORTNITE_API_KEY;
+  if (key) {
+    headers['x-api-key'] = key;
   }
 
-  try {
-    const upstream = await fetch('https://fortnite-api.com/v2/shop/br', { headers });
-    const body = await upstream.json().catch(() => null);
+  const candidates = [
+    'https://fortnite-api.com/v2/shop',
+    'https://fortnite-api.com/v2/shop/combined',
+    'https://fortnite-api.com/v2/shop/br'
+  ];
 
-    if (!upstream.ok) {
-      console.error('Fortnite API returned status', upstream.status);
+  let lastStatus = 502;
+
+  for (const endpoint of candidates) {
+    try {
+      const upstream = await fetch(endpoint, { headers });
+      lastStatus = upstream.status;
+
+      if (upstream.ok) {
+        const payload = await upstream.json();
+        res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+        return res.status(200).json(payload);
+      }
+
+      const body = await upstream.json().catch(() => null);
+      if (upstream.status === 404 || upstream.status === 410) {
+        continue;
+      }
+
       return res.status(upstream.status).json({
         error: upstream.status === 401 || upstream.status === 403
           ? 'Fortnite-API a refusé la requête. Vérifie la clé configurée dans Vercel.'
-          : `Le service Fortnite-API a répondu avec le statut ${upstream.status}.`
+          : body?.error || `Le service Fortnite-API a répondu avec le statut ${upstream.status}.`
       });
+    } catch (error) {
+      console.error('Endpoint tenté sans succès:', endpoint, error);
     }
-
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
-    return res.status(200).json(body);
-  } catch (error) {
-    console.error('Unable to reach Fortnite API:', error);
-    return res.status(502).json({ error: 'Impossible de joindre Fortnite-API pour le moment.' });
   }
+
+  return res.status(lastStatus).json({
+    error: 'Aucune route actuelle de boutique Fortnite n’a répondu correctement. Le site utilisait une ancienne route obsolète (410 Gone).'
+  });
 };
