@@ -22,21 +22,32 @@
       margin-top: 0;
       margin-bottom: 20px;
     }
+    #loading {
+      color: #00d2ff;
+      font-size: 1.1rem;
+      margin-top: 30px;
+    }
     img {
       max-width: 100%;
       height: auto;
       border-radius: 12px;
       border: 2px solid #334155;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: none;
     }
   </style>
 </head>
 <body>
-
   <h1>🛒 Boutique Fortnite</h1>
   <p>Mise à jour officielle en direct</p>
 
-  <img src="https://bot.fortnite-api.com/shop.png" alt="Boutique Fortnite du jour">
-
+  <div id="loading">Chargement de la boutique en cours...</div>
+  <img
+    id="shopImage"
+    src="https://bot.fortnite-api.com/shop.png"
+    alt="Boutique Fortnite du jour"
+    onload="document.getElementById('shopImage').style.display='block'; document.getElementById('loading').style.display='none';"
+    onerror="document.getElementById('loading').textContent='Erreur de chargement de la boutique.';"
+  >
 </body>
 </html>
