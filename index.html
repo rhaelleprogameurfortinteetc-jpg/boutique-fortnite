@@ -80,6 +80,9 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .error strong { display: block; margin-bottom: 7px; color: var(--text); }
     .footer { margin-top: 15px; color: #74829d; font-size: 12px; line-height: 1.6; text-align: center; }
+    .footer a { display: inline-block; margin-top: 8px; color: var(--cyan); font-weight: 800; text-decoration: none; }
+    .footer a:hover { color: #fff; text-decoration: underline; }
+    .footer a:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 3px; }
 
     @media (max-width: 600px) {
       .shell { width: min(100% - 22px, 1120px); padding-top: 18px; }
@@ -127,7 +130,10 @@
       <img id="shopImage" alt="Visuel complet de la boutique Fortnite du jour" hidden>
     </section>
 
-    <footer class="footer">Site de fan non officiel, sans affiliation avec Epic Games. Le visuel de la boutique est fourni par Fortnite-API.</footer>
+    <footer class="footer">
+      Site de fan non officiel, sans affiliation avec Epic Games. Le visuel de la boutique est fourni par Fortnite-API.<br>
+      <a href="https://linktr.ee/rhaelleprogameurfortinteetc" target="_blank" rel="noopener noreferrer">Curieux ? Retrouve-moi ici ↗</a>
+    </footer>
   </main>
 
   <script>
