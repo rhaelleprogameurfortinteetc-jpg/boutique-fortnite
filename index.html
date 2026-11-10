@@ -4,168 +4,137 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090d1c">
-  <meta name="description" content="Boutique Fortnite du jour de Rhaelleprogameur, avec un visuel gamer premium et les offres actuelles en direct.">
+  <meta name="description" content="La boutique Fortnite du jour de Rhaelleprogameur : offres, visuels et ambiance gamer en un seul endroit.">
   <title>Rhaelleprogameur | Boutique Fortnite du Jour</title>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #090d1c;
-      --panel: #11182a;
-      --panel-light: #18243b;
-      --cyan: #42e8ff;
-      --blue: #4388ff;
-      --purple: #a76bff;
-      --text: #f5f7ff;
-      --muted: #9aa8c2;
-      --line: rgba(160, 185, 255, .18);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(ellipse at 12% 0%, rgba(66, 232, 255, .13), transparent 34rem),
-        radial-gradient(ellipse at 95% 15%, rgba(167, 107, 255, .15), transparent 30rem),
-        var(--bg);
-    }
-
-    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 26px 0 52px; }
-    .header { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 30px; }
-    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
-    .logo {
-      width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center;
-      border: 1px solid rgba(66,232,255,.55); border-radius: 15px;
-      background: linear-gradient(145deg, rgba(66,232,255,.22), rgba(67,136,255,.12) 55%, rgba(167,107,255,.2));
-      box-shadow: 0 0 26px rgba(66,232,255,.17), inset 0 0 18px rgba(66,232,255,.08);
-      color: var(--cyan); font-size: 24px;
-    }
-    .brand-name { margin: 0; font-size: 12px; font-weight: 900; letter-spacing: .22em; color: var(--cyan); text-transform: uppercase; }
-    .brand-sub { margin: 4px 0 0; color: var(--muted); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
-    .live { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(17,24,42,.72); color: #c9d5ea; font-size: 12px; white-space: nowrap; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #64f3a5; box-shadow: 0 0 12px #64f3a5; }
-
-    .intro { margin-bottom: 22px; }
-    .eyebrow { margin: 0 0 8px; color: var(--purple); font-weight: 800; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
-    h1 { margin: 0; font-size: clamp(32px, 6vw, 58px); line-height: .98; letter-spacing: -.045em; text-transform: uppercase; }
-    h1 span { color: var(--cyan); text-shadow: 0 0 26px rgba(66,232,255,.24); }
-    .description { max-width: 640px; margin: 13px 0 0; color: var(--muted); line-height: 1.6; }
-
-    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin: 24px 0 14px; }
-    .update-text { color: var(--muted); font-size: 13px; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .button {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px;
-      padding: 0 15px; border: 1px solid var(--line); border-radius: 11px;
-      color: var(--text); background: rgba(24,36,59,.8); font: inherit; font-size: 13px; font-weight: 800;
-      text-decoration: none; cursor: pointer; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
-    }
-    .button:hover { transform: translateY(-2px); border-color: rgba(66,232,255,.6); box-shadow: 0 8px 24px rgba(30,130,255,.15); }
-    .button.primary { color: #06121e; border-color: transparent; background: linear-gradient(100deg, var(--cyan), #81aaff); }
-    .button:focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; }
-
-    .shop-frame {
-      position: relative; overflow: hidden; min-height: 240px; padding: clamp(8px, 2vw, 18px);
-      border: 1px solid var(--line); border-radius: 20px;
-      background: linear-gradient(145deg, rgba(24,36,59,.94), rgba(12,17,32,.96));
-      box-shadow: 0 20px 70px rgba(0,0,0,.4), 0 0 35px rgba(67,136,255,.08);
-    }
-    .shop-frame::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent); }
-    #shopImage { display: block; width: 100%; height: auto; min-height: 220px; object-fit: contain; border-radius: 12px; }
-    .loading, .error { display: none; text-align: center; padding: 48px 18px; color: var(--muted); }
-    .loading.visible, .error.visible { display: block; }
-    .spinner { width: 28px; height: 28px; margin: 0 auto 13px; border: 3px solid rgba(255,255,255,.14); border-top-color: var(--cyan); border-radius: 50%; animation: spin .8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .error strong { display: block; margin-bottom: 7px; color: var(--text); }
-    .footer { margin-top: 15px; color: #74829d; font-size: 12px; line-height: 1.6; text-align: center; }
-    .footer a { display: inline-block; margin-top: 8px; color: var(--cyan); font-weight: 800; text-decoration: none; }
-    .footer a:hover { color: #fff; text-decoration: underline; }
-    .footer a:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 3px; }
-
-    @media (max-width: 600px) {
-      .shell { width: min(100% - 22px, 1120px); padding-top: 18px; }
-      .header { margin-bottom: 25px; }
-      .live { font-size: 0; padding: 10px; }
-      .live .dot { width: 9px; height: 9px; }
-      .toolbar { align-items: flex-start; }
-      .actions { width: 100%; }
-      .actions .button { flex: 1; }
-      .shop-frame { min-height: 170px; border-radius: 15px; }
-      #shopImage { min-height: 150px; }
-    }
+    :root { color-scheme: dark; --bg:#090d1c; --panel:#11182a; --cyan:#42e8ff; --blue:#4388ff; --purple:#a76bff; --text:#f5f7ff; --muted:#9aa8c2; --line:rgba(160,185,255,.18); }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(ellipse at 12% 0%,rgba(66,232,255,.13),transparent 34rem),radial-gradient(ellipse at 95% 15%,rgba(167,107,255,.15),transparent 30rem),var(--bg); }
+    .shell { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:26px 0 42px; }
+    .header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:30px; }
+    .brand { display:flex; align-items:center; gap:13px; }
+    .logo { width:48px; height:48px; display:grid; place-items:center; border:1px solid rgba(66,232,255,.55); border-radius:15px; background:linear-gradient(145deg,rgba(66,232,255,.22),rgba(67,136,255,.12) 55%,rgba(167,107,255,.2)); box-shadow:0 0 26px rgba(66,232,255,.17); color:var(--cyan); font-size:24px; }
+    .brand-name { margin:0; color:var(--cyan); font-size:12px; font-weight:900; letter-spacing:.18em; text-transform:uppercase; }
+    .brand-sub { margin:4px 0 0; color:var(--muted); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+    .live { display:flex; align-items:center; gap:8px; padding:9px 12px; border:1px solid var(--line); border-radius:999px; background:rgba(17,24,42,.72); color:#c9d5ea; font-size:12px; }
+    .dot { width:8px; height:8px; border-radius:50%; background:#64f3a5; box-shadow:0 0 12px #64f3a5; }
+    .intro { margin-bottom:22px; }
+    .eyebrow { margin:0 0 8px; color:var(--purple); font-weight:800; font-size:12px; letter-spacing:.2em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(32px,6vw,58px); line-height:.98; letter-spacing:-.045em; text-transform:uppercase; }
+    h1 span { color:var(--cyan); text-shadow:0 0 26px rgba(66,232,255,.24); }
+    .description { max-width:640px; margin:13px 0 0; color:var(--muted); line-height:1.6; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin:24px 0 14px; }
+    .update-text { color:var(--muted); font-size:13px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:42px; padding:0 15px; border:1px solid var(--line); border-radius:11px; color:var(--text); background:rgba(24,36,59,.8); font:inherit; font-size:13px; font-weight:800; cursor:pointer; transition:transform .16s ease,border-color .16s ease; }
+    .button:hover { transform:translateY(-2px); border-color:rgba(66,232,255,.6); }
+    .button.primary { color:#06121e; border-color:transparent; background:linear-gradient(100deg,var(--cyan),#81aaff); }
+    .button:focus-visible,a:focus-visible { outline:3px solid var(--purple); outline-offset:3px; }
+    .shop-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:16px; }
+    .card { overflow:hidden; border:1px solid var(--line); border-radius:16px; background:linear-gradient(160deg,rgba(24,36,59,.96),rgba(12,17,32,.98)); box-shadow:0 14px 35px rgba(0,0,0,.24); transition:transform .18s ease,border-color .18s ease; }
+    .card:hover { transform:translateY(-4px); border-color:rgba(66,232,255,.48); }
+    .card-art { display:grid; place-items:center; aspect-ratio:1/1; overflow:hidden; background:radial-gradient(circle at 50% 30%,rgba(66,232,255,.18),transparent 60%),linear-gradient(135deg,#18243b,#101528); }
+    .card-art img { width:100%; height:100%; object-fit:contain; }
+    .card-info { padding:12px; }
+    .item-name { min-height:2.5em; margin:0; font-weight:800; line-height:1.25; }
+    .item-type { margin:5px 0 10px; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.08em; }
+    .price { color:#f5d76e; font-weight:900; font-size:14px; }
+    .message { padding:40px 18px; border:1px dashed rgba(148,163,184,.35); border-radius:16px; color:var(--muted); text-align:center; line-height:1.6; }
+    .message strong { display:block; margin-bottom:7px; color:var(--text); }
+    .footer { margin-top:28px; color:#74829d; font-size:12px; line-height:1.7; text-align:center; }
+    .footer a { color:var(--cyan); font-weight:800; text-decoration:none; }
+    .footer a:hover { color:#fff; text-decoration:underline; }
+    @media(max-width:600px) { .shell{width:calc(100% - 22px);padding-top:18px}.header{margin-bottom:25px}.live{font-size:0;padding:10px}.shop-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:11px} }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="header">
-      <div class="brand" aria-label="Rhaelleprogameur">
-        <div class="logo" aria-hidden="true">✦</div>
-        <div>
-          <p class="brand-name">Rhaelleprogameur</p>
-          <p class="brand-sub">Fortnite • Item shop</p>
-        </div>
-      </div>
+      <div class="brand"><div class="logo" aria-hidden="true">✦</div><div><p class="brand-name">Rhaelleprogameur</p><p class="brand-sub">Fortnite • Item shop</p></div></div>
       <div class="live"><span class="dot" aria-hidden="true"></span> Boutique du jour</div>
     </header>
-
     <section class="intro" aria-labelledby="page-title">
       <p class="eyebrow">Le shop en un coup d’œil</p>
       <h1 id="page-title">Boutique <span>Fortnite</span></h1>
-      <p class="description">Retrouve les offres du jour dans une interface gamer inspirée de Rhaelleprogameur. La boutique complète est affichée depuis le visuel du shop.</p>
+      <p class="description">Retrouve les offres du jour dans une interface gamer aux couleurs de Rhaelleprogameur.</p>
     </section>
-
-    <div class="toolbar">
-      <div class="update-text" id="updateText" aria-live="polite">Préparation de la boutique…</div>
-      <div class="actions">
-        <button class="button primary" id="refreshButton" type="button">↻ Actualiser</button>
-        <a class="button" href="https://bot.fortnite-api.com/shop.png" target="_blank" rel="noopener noreferrer">↗ Ouvrir l’image</a>
-      </div>
-    </div>
-
-    <section class="shop-frame" aria-label="Image de la boutique Fortnite">
-      <div class="loading visible" id="loading"><div class="spinner" aria-hidden="true"></div>Chargement de la boutique…</div>
-      <div class="error" id="error" role="status"><strong>La boutique ne répond pas pour le moment.</strong>Réessaie dans un instant ou ouvre le visuel directement avec le bouton ci-dessus.</div>
-      <img id="shopImage" alt="Visuel complet de la boutique Fortnite du jour" hidden>
-    </section>
-
-    <footer class="footer">
-      Site de fan non officiel, sans affiliation avec Epic Games. Le visuel de la boutique est fourni par Fortnite-API.<br>
-      <a href="https://linktr.ee/rhaelleprogameurfortinteetc" target="_blank" rel="noopener noreferrer">Curieux ? Retrouve-moi ici ↗</a>
-    </footer>
+    <div class="toolbar"><div class="update-text" id="status" aria-live="polite">Chargement des offres…</div><button class="button primary" id="refresh" type="button">↻ Actualiser</button></div>
+    <section id="shop" class="shop-grid" aria-label="Offres de la boutique Fortnite"><div class="message">Chargement de la boutique…</div></section>
+    <footer class="footer">Site de fan non officiel, sans affiliation avec Epic Games. Les données sont fournies par Fortnite-API.<br><a href="https://linktr.ee/rhaelleprogameurfortinteetc" target="_blank" rel="noopener noreferrer">Curieux ? Retrouve-moi ici ↗</a></footer>
   </main>
-
   <script>
-    const image = document.getElementById('shopImage');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
-    const updateText = document.getElementById('updateText');
-    const refreshButton = document.getElementById('refreshButton');
-    const shopImageUrl = 'https://bot.fortnite-api.com/shop.png';
+    const shop = document.getElementById('shop');
+    const statusText = document.getElementById('status');
+    const refreshButton = document.getElementById('refresh');
 
-    function loadShop() {
-      error.classList.remove('visible');
-      loading.classList.add('visible');
-      image.hidden = true;
-      updateText.textContent = 'Chargement du visuel…';
-      image.src = shopImageUrl + '?refresh=' + Date.now();
+    function showMessage(title, detail) {
+      shop.replaceChildren();
+      const box = document.createElement('div');
+      box.className = 'message';
+      const strong = document.createElement('strong');
+      strong.textContent = title;
+      box.append(strong, document.createTextNode(detail));
+      shop.appendChild(box);
     }
 
-    image.addEventListener('load', () => {
-      loading.classList.remove('visible');
-      error.classList.remove('visible');
-      image.hidden = false;
-      updateText.textContent = 'Visuel chargé • ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    });
+    async function loadShop() {
+      refreshButton.disabled = true;
+      statusText.textContent = 'Chargement des offres…';
+      showMessage('Chargement…', 'Récupération des offres actuelles.');
+      try {
+        const response = await fetch('/api/shop', { headers: { Accept: 'application/json' } });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || `Erreur serveur (${response.status})`);
+        const entries = payload?.data?.entries;
+        if (!Array.isArray(entries) || entries.length === 0) throw new Error('Aucune offre n’a été renvoyée par l’API.');
 
-    image.addEventListener('error', () => {
-      loading.classList.remove('visible');
-      image.hidden = true;
-      error.classList.add('visible');
-      updateText.textContent = 'Connexion au fournisseur indisponible';
-    });
+        const fragment = document.createDocumentFragment();
+        let count = 0;
+        for (const entry of entries) {
+          for (const item of (Array.isArray(entry.items) ? entry.items : [])) {
+            const imageUrl = item.images?.featured || item.images?.icon || item.images?.smallIcon || '';
+            const card = document.createElement('article');
+            card.className = 'card';
+            const art = document.createElement('div');
+            art.className = 'card-art';
+            if (imageUrl) {
+              const img = document.createElement('img');
+              img.src = imageUrl;
+              img.alt = item.name ? `Image de ${item.name}` : 'Image de l’objet Fortnite';
+              img.loading = 'lazy';
+              img.onerror = () => { img.remove(); };
+              art.appendChild(img);
+            } else {
+              art.textContent = 'Image indisponible';
+              art.style.color = 'var(--muted)';
+            }
+            const info = document.createElement('div');
+            info.className = 'card-info';
+            const name = document.createElement('p');
+            name.className = 'item-name';
+            name.textContent = item.name || 'Objet Fortnite';
+            const type = document.createElement('p');
+            type.className = 'item-type';
+            type.textContent = item.type?.displayValue || item.rarity?.displayValue || 'Offre du jour';
+            const price = document.createElement('div');
+            price.className = 'price';
+            const amount = entry.finalPrice ?? entry.regularPrice;
+            price.textContent = amount == null ? 'Prix indisponible' : `🪙 ${amount} V-Bucks`;
+            info.append(name, type, price);
+            card.append(art, info);
+            fragment.appendChild(card);
+            count++;
+          }
+        }
+        if (!count) throw new Error('Les offres reçues ne contiennent aucun objet affichable.');
+        shop.replaceChildren(fragment);
+        statusText.textContent = `${count} objets • actualisé à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+      } catch (error) {
+        statusText.textContent = 'Boutique indisponible';
+        showMessage('Impossible de charger la boutique.', `${error.message} Vérifie la configuration de la fonction API sur Vercel puis réessaie.`);
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
 
     refreshButton.addEventListener('click', loadShop);
     loadShop();
