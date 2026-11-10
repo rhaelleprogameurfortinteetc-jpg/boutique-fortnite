@@ -5,11 +5,10 @@ module.exports = async function handler(req, res) {
   }
 
   const headers = { Accept: 'application/json' };
-
-  // Récupère la clé depuis les variables d'environnement Vercel.
-  // Aucune clé ne doit être présente dans ce fichier.
+  // La boutique est publique, mais si une clé est configurée dans Vercel,
+  // Fortnite-API attend le nom d'en-tête x-api-key.
   if (process.env.FORTNITE_API_KEY) {
-    headers.Authorization = process.env.FORTNITE_API_KEY;
+    headers['x-api-key'] = process.env.FORTNITE_API_KEY;
   }
 
   try {
@@ -20,7 +19,7 @@ module.exports = async function handler(req, res) {
       console.error('Fortnite API returned status', upstream.status);
       return res.status(upstream.status).json({
         error: upstream.status === 401 || upstream.status === 403
-          ? 'Fortnite-API a refusé la requête. Vérifie FORTNITE_API_KEY dans Vercel.'
+          ? 'Fortnite-API a refusé la requête. Vérifie la clé configurée dans Vercel.'
           : `Le service Fortnite-API a répondu avec le statut ${upstream.status}.`
       });
     }
