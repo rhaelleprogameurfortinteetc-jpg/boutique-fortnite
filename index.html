@@ -52,15 +52,25 @@
       <div class="brand"><div class="logo" aria-hidden="true">✦</div><div><p class="brand-name">Rhaelleprogameur</p><p class="brand-sub">Fortnite • Item shop</p></div></div>
       <div class="live"><span class="dot" aria-hidden="true"></span> Boutique du jour</div>
     </header>
+
     <section class="intro" aria-labelledby="page-title">
       <p class="eyebrow">Le shop en un coup d’œil</p>
       <h1 id="page-title">Boutique <span>Fortnite</span></h1>
       <p class="description">Retrouve les offres du jour dans une interface gamer aux couleurs de Rhaelleprogameur.</p>
     </section>
-    <div class="toolbar"><div class="update-text" id="status" aria-live="polite">Chargement des offres…</div><button class="button primary" id="refresh" type="button">↻ Actualiser</button></div>
-    <section id="shop" class="shop-grid" aria-label="Offres de la boutique Fortnite"><div class="message">Chargement de la boutique…</div></section>
+
+    <div class="toolbar">
+      <div class="update-text" id="status" aria-live="polite">Chargement des offres…</div>
+      <button class="button primary" id="refresh" type="button">↻ Actualiser</button>
+    </div>
+
+    <section id="shop" class="shop-grid" aria-label="Offres de la boutique Fortnite">
+      <div class="message">Chargement de la boutique…</div>
+    </section>
+
     <footer class="footer">Site de fan non officiel, sans affiliation avec Epic Games. Les données sont fournies par Fortnite-API.<br><a href="https://linktr.ee/rhaelleprogameurfortinteetc" target="_blank" rel="noopener noreferrer">Curieux ? Retrouve-moi ici ↗</a></footer>
   </main>
+
   <script>
     const shop = document.getElementById('shop');
     const statusText = document.getElementById('status');
@@ -76,30 +86,52 @@
       shop.appendChild(box);
     }
 
+    function extractEntries(payload) {
+      const root = payload?.data ?? payload ?? {};
+      const directEntries = Array.isArray(root.entries) ? root.entries : [];
+      const shopEntries = Array.isArray(root.shop) ? root.shop : [];
+      const itemEntries = Array.isArray(root.items) ? root.items : [];
+      return directEntries.length ? directEntries : shopEntries.length ? shopEntries : itemEntries;
+    }
+
     async function loadShop() {
       refreshButton.disabled = true;
       statusText.textContent = 'Chargement des offres…';
       showMessage('Chargement…', 'Récupération des offres actuelles.');
+
       try {
         const response = await fetch('/api/shop', { headers: { Accept: 'application/json' } });
         const payload = await response.json();
-        if (!response.ok) throw new Error(payload.error || `Erreur serveur (${response.status})`);
-        const entries = payload?.data?.entries;
-        if (!Array.isArray(entries) || entries.length === 0) throw new Error('Aucune offre n’a été renvoyée par l’API.');
+
+        if (!response.ok) {
+          throw new Error(payload.error || `Erreur serveur (${response.status})`);
+        }
+
+        const entries = extractEntries(payload);
+
+        if (!Array.isArray(entries) || entries.length === 0) {
+          throw new Error('Aucune offre n’a été renvoyée par l’API.');
+        }
 
         const fragment = document.createDocumentFragment();
         let count = 0;
+
         for (const entry of entries) {
-          for (const item of (Array.isArray(entry.items) ? entry.items : [])) {
-            const imageUrl = item.images?.featured || item.images?.icon || item.images?.smallIcon || '';
+          const items = Array.isArray(entry?.items) ? entry.items : [entry];
+
+          for (const item of items) {
+            const imageUrl = item?.images?.featured || item?.images?.icon || item?.images?.smallIcon || item?.image || item?.icon || '';
+
             const card = document.createElement('article');
             card.className = 'card';
+
             const art = document.createElement('div');
             art.className = 'card-art';
+
             if (imageUrl) {
               const img = document.createElement('img');
               img.src = imageUrl;
-              img.alt = item.name ? `Image de ${item.name}` : 'Image de l’objet Fortnite';
+              img.alt = item?.name ? `Image de ${item.name}` : 'Image de l’objet Fortnite';
               img.loading = 'lazy';
               img.onerror = () => { img.remove(); };
               art.appendChild(img);
@@ -107,25 +139,34 @@
               art.textContent = 'Image indisponible';
               art.style.color = 'var(--muted)';
             }
+
             const info = document.createElement('div');
             info.className = 'card-info';
+
             const name = document.createElement('p');
             name.className = 'item-name';
-            name.textContent = item.name || 'Objet Fortnite';
+            name.textContent = item?.name || entry?.name || 'Objet Fortnite';
+
             const type = document.createElement('p');
             type.className = 'item-type';
-            type.textContent = item.type?.displayValue || item.rarity?.displayValue || 'Offre du jour';
+            type.textContent = item?.type?.displayValue || item?.rarity?.displayValue || entry?.type || 'Offre du jour';
+
             const price = document.createElement('div');
             price.className = 'price';
-            const amount = entry.finalPrice ?? entry.regularPrice;
+            const amount = item?.price ?? item?.finalPrice ?? entry?.finalPrice ?? entry?.regularPrice;
             price.textContent = amount == null ? 'Prix indisponible' : `🪙 ${amount} V-Bucks`;
+
             info.append(name, type, price);
             card.append(art, info);
             fragment.appendChild(card);
             count++;
           }
         }
-        if (!count) throw new Error('Les offres reçues ne contiennent aucun objet affichable.');
+
+        if (!count) {
+          throw new Error('Les offres reçues ne contiennent aucun objet affichable.');
+        }
+
         shop.replaceChildren(fragment);
         statusText.textContent = `${count} objets • actualisé à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
       } catch (error) {
